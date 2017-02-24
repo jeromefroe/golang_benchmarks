@@ -205,6 +205,8 @@ probably isn't any actual performance difference.
 
 `string_concatenation_test.go`
 
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
 BenchmarkStringConcatenation      | 20000000 |  83.9 ns/op |  64 B/op | 1 allocs/op
 BenchmarkStringBuffer             | 10000000 |   131 ns/op |  64 B/op | 1 allocs/op
 BenchmarkStringJoin               | 10000000 |   144 ns/op | 128 B/op | 2 allocs/op
