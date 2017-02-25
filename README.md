@@ -174,8 +174,8 @@ be copied into the function's stack when passed by value.
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
 BenchmarkAllocateBufferNoPool | 20000000 |  118 ns/op | 368 B/op | 2 allocs/op
-BenchmarkSyncBufferPool       | 50000000 | 27.7 ns/op |   0 B/op | 0 allocs/op
 BenchmarkChannelBufferPool    | 10000000 |  213 ns/op |  43 B/op | 0 allocs/op
+BenchmarkSyncBufferPool       | 50000000 | 27.7 ns/op |   0 B/op | 0 allocs/op
 
 This benchmark compares three different memory allocation schemes. The first approach just
 allocates its buffer on the heap normally. After it's done using the buffer it will eventually be
