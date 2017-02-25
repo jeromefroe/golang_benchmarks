@@ -68,7 +68,7 @@ Generated using go version go1.7.5 darwin/amd64
 This benchmark examines the speed with which one can put objects onto a channel and comes from this
 [golang-nuts forum post](https://groups.google.com/forum/#!topic/golang-nuts/ec9G0MGjn48). Using a buffered
 channels is over twice as fast as using a synchronous channel which makes sense since the goroutine that is
-putting objects into the channel need now wait until the object is taken out of the channel before placing
+putting objects into the channel need not wait until the object is taken out of the channel before placing
 another object into it.
 
 ### Channel vs Ring Buffer
@@ -116,7 +116,7 @@ Generated using go version go1.7.5 darwin/amd64
 `defer` carries a slight performance cost, so for simple use cases it may be preferable
 to call any cleanup code manually. As this [blog post](http://bravenewgeek.com/so-you-wanna-go-fast/)
 notes, `defer` can be called from within conditional blocks and must be called if a functions
-panics as well. Therefore, the compiler can't simply add the deferred function simply
+panics as well. Therefore, the compiler can't simply add the deferred function
 wherever the function returns and instead `defer` must be more nuanced, resuling in the performance
 hit. There is, in fact, an [open issue](https://github.com/golang/go/issues/14939) to address the
 performance cost of `defer`.
@@ -146,7 +146,7 @@ on a pointer to a struct, calling a method on an interface, and calling a functi
 pointer field in a struct. As expected, the method call on the pointer to the struct is the fastest since
 the compiler knows what function is being called at compile time, whereas the others do not. For example,
 the interface method call relies on dynamic dispatch at runtime to determine which function call and
-likewise the function pointer call is determined at runtime as well and has almost identical performance
+likewise the function pointer to call is determined at runtime as well and has almost identical performance
 to the interface method call.
 
 ### Pass By Value vs Reference
@@ -181,9 +181,9 @@ This benchmark compares three different memory allocation schemes. The first app
 allocates its buffer on the heap normally. After it's done using the buffer it will eventually be
 garbage collected. The second approach uses Go's sync.Pool type to pool buffers which caches objects
 between runs of the garbage collector. The last approach uses a channel to permanently pool objects.
-The difference between the last two appraoches is the sync.Pool dynamically resizes itself and clears
+The difference between the last two approaches is the sync.Pool dynamically resizes itself and clears
 items from the pool during a GC run. Two good resources to learn more about pools in Go
-are these blog posts
+are these blog posts:
 [Using Buffer Pools with Go](https://elithrar.github.io/article/using-buffer-pools-with-go/)
 and
 [How to Optimize Garbage Collection in Go](https://www.cockroachlabs.com/blog/how-to-optimize-garbage-collection-in-go/).
@@ -198,8 +198,9 @@ BenchmarkSliceInitializationAppend | 10000000 | 132 ns/op | 160 B/op | 1 allocs/
 BenchmarkSliceInitializationIndex  | 10000000 | 119 ns/op | 160 B/op | 1 allocs/op
 
 This benchmark looks at slice initialization with `append` versus using an explicit index. I ran this benchmark
-a few times and it seesawed back and fourth. Ultimately, I think they compile down into the same code so there
-probably isn't any actual performance difference.
+a few times and it seesawed back and forth. Ultimately, I think they compile down into the same code so there
+probably isn't any actual performance difference. I'd like to take an actual look at the assembly
+that they are compiled to and update this section in the future.
 
 ### String Concatenation
 
@@ -212,7 +213,7 @@ BenchmarkStringBuffer             | 10000000 |   131 ns/op |  64 B/op | 1 allocs
 BenchmarkStringJoin               | 10000000 |   144 ns/op | 128 B/op | 2 allocs/op
 BenchmarkStringConcatenationShort | 50000000 |  25.4 ns/op |   0 B/op | 0 allocs/op
 
-This benchmark looks at the three different ways to perform string concatenation, the first use the built `+`
+This benchmark looks at the three different ways to perform string concatenation, the first uses the builtin `+`
 operator, the second uses a `bytes.Buffer` and the third uses `string.Join`. It seems using `+` is preferable
 to either of the other approaches which are similar in performace.
 
