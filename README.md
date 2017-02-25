@@ -54,6 +54,24 @@ in the file
 //  ...
 ```
 
+### Bit Tricks test
+
+`bit_tricks_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkMod    | 2000000000 | 0.32 ns/op
+BenchmarkAnd    | 2000000000 | 0.31 ns/op
+BenchmarkDivide | 2000000000 | 0.31 ns/op
+BenchmarkShift  | 2000000000 | 0.33 ns/op
+
+These benchmarks look at two bit fiddling techniques. The first two benchmarks compare finding the
+value of a number modulo 2. The first benchmark uses the modulus operator `%` and the second benchmark
+does a bitwise and `&` with 1, which is equivalent. The last two benchmarks compare finding the
+value of a number divided by 2. The first benchmark uses the division operator `/` and the second
+benchmark does a bit shift right by 1, which is equivalent. In neither case did I see any significant
+performance difference.
+
 ### Buffered vs Synchronous Channel
 
 `buffered_vs_unbuffered_channel_test.go`
