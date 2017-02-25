@@ -65,6 +65,8 @@ BenchmarkAnd    | 2000000000 | 0.31 ns/op
 BenchmarkDivide | 2000000000 | 0.31 ns/op
 BenchmarkShift  | 2000000000 | 0.33 ns/op
 
+Generated using go version go1.7.5 darwin/amd64
+
 These benchmarks look at two bit fiddling techniques. The first two benchmarks compare finding the
 value of a number modulo 2. The first benchmark uses the modulus operator `%` and the second benchmark
 does a bitwise and `&` with 1, which is equivalent. The last two benchmarks compare finding the
@@ -103,6 +105,8 @@ BenchmarkChannelMPSC    |  3000000  |        417 ns/op  |     8 B/op |    1 allo
 BenchmarkRingBufferMPSC |   500000  |       8387 ns/op  |     8 B/op |    1 allocs/op
 BenchmarkChannelMPMC    |       20  |   70112786 ns/op  | 10532 B/op | 1031 allocs/op
 BenchmarkRingBufferMPMC |        1  | 1228960979 ns/op  | 14256 B/op | 1015 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
 
 The blog post [So You Wanna Go Fast?](http://bravenewgeek.com/so-you-wanna-go-fast/) also took a look at using
 channels versus using a
@@ -167,6 +171,23 @@ the interface method call relies on dynamic dispatch at runtime to determine whi
 likewise the function pointer to call is determined at runtime as well and has almost identical performance
 to the interface method call.
 
+### Mutex
+
+`mutex_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkNoMutexLock     | 2000000000 | 1.18 ns/op
+BenchmarkRWMutexReadLock |   30000000 | 54.5 ns/op
+BenchmarkRWMutexLock     |   20000000 | 96.0 ns/op
+BenchmarkMutexLock       |   20000000 | 78.7 ns/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+This benchmark looks at the cost of acquiring different kinds of locks. In the first benchmark we
+don't acquire any lock. In the second benchmark we acquire a read lock on a `RWMutex`. In the third
+we acquire a write lock on a `RWMutex`. And in the last benchmark we acquire a regular `Mutex` lock.
+
 ### Pass By Value vs Reference
 
 `pass_by_value_vs_reference_test.go`
@@ -179,6 +200,8 @@ BenchmarkPassByReferenceFourWords  |   500000000  | 2.71 ns/op
 BenchmarkPassByValueFourWords      |  1000000000  | 2.78 ns/op
 BenchmarkPassByReferenceEightWords |  1000000000  | 2.32 ns/op
 BenchmarkPassByValueEightWords     |   300000000  | 4.35 ns/op
+
+Generated using go version go1.7.5 darwin/amd64
 
 This benchmark looks at the performance cost of passing a variable by reference vs passing it by value. For
 small structs there doesn't appear to be much of a difference, but as the structs gets larger we start to
@@ -194,6 +217,8 @@ Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocation
 BenchmarkAllocateBufferNoPool | 20000000 |  118 ns/op | 368 B/op | 2 allocs/op
 BenchmarkChannelBufferPool    | 10000000 |  213 ns/op |  43 B/op | 0 allocs/op
 BenchmarkSyncBufferPool       | 50000000 | 27.7 ns/op |   0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
 
 This benchmark compares three different memory allocation schemes. The first approach just
 allocates its buffer on the heap normally. After it's done using the buffer it will eventually be
@@ -215,6 +240,8 @@ Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocation
 BenchmarkSliceInitializationAppend | 10000000 | 132 ns/op | 160 B/op | 1 allocs/op
 BenchmarkSliceInitializationIndex  | 10000000 | 119 ns/op | 160 B/op | 1 allocs/op
 
+Generated using go version go1.7.5 darwin/amd64
+
 This benchmark looks at slice initialization with `append` versus using an explicit index. I ran this benchmark
 a few times and it seesawed back and forth. Ultimately, I think they compile down into the same code so there
 probably isn't any actual performance difference. I'd like to take an actual look at the assembly
@@ -230,6 +257,8 @@ BenchmarkStringConcatenation      | 20000000 |  83.9 ns/op |  64 B/op | 1 allocs
 BenchmarkStringBuffer             | 10000000 |   131 ns/op |  64 B/op | 1 allocs/op
 BenchmarkStringJoin               | 10000000 |   144 ns/op | 128 B/op | 2 allocs/op
 BenchmarkStringConcatenationShort | 50000000 |  25.4 ns/op |   0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
 
 This benchmark looks at the three different ways to perform string concatenation, the first uses the builtin `+`
 operator, the second uses a `bytes.Buffer` and the third uses `string.Join`. It seems using `+` is preferable
