@@ -15,6 +15,8 @@ type Bar struct {
 	bah int64
 }
 
+var bts []byte
+
 func BenchmarkAllocateFooStack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		func() Foo {
@@ -44,5 +46,19 @@ func BenchmarkAllocateBarHeap(b *testing.B) {
 		func() *Bar {
 			return new(Bar)
 		}()
+	}
+}
+
+func BenchmarkAllocateSliceHeapNoEscape(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make([]byte, 1024)
+		bts[0] = 1
+	}
+}
+
+func BenchmarkAllocateSliceHeapEscape(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts = make([]byte, 1024)
+		bts[0] = 1
 	}
 }

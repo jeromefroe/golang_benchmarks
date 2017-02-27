@@ -6,10 +6,6 @@ import (
 	"testing"
 )
 
-// TODO: benchmark string.Join
-
-// const vs var
-
 var (
 	bulbasur  = "bulbasaur"
 	ivysaur   = "ivysaur"

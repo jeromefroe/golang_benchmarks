@@ -10,10 +10,12 @@ inspired by
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkAllocateFooStack | 1000000000 | 2.27 ns/op  |  0 B/op   | 0 allocs/op
-BenchmarkAllocateBarStack | 1000000000 | 2.27 ns/op  |  0 B/op   | 0 allocs/op
-BenchmarkAllocateFooHeap  | 50000000   | 29.0 ns/op  | 32 B/op   | 1 allocs/op
-BenchmarkAllocateBarHeap  | 50000000   | 30.2 ns/op  | 32 B/op   | 1 allocs/op
+BenchmarkAllocateFooStack          | 1000000000 | 2.27 ns/op  |    0 B/op | 0 allocs/op
+BenchmarkAllocateBarStack          | 1000000000 | 2.27 ns/op  |    0 B/op | 0 allocs/op
+BenchmarkAllocateFooHeap           | 50000000   | 29.0 ns/op  |   32 B/op | 1 allocs/op
+BenchmarkAllocateBarHeap           | 50000000   | 30.2 ns/op  |   32 B/op | 1 allocs/op
+BenchmarkAllocateSliceHeapNoEscape | 50000000   | 32.3 ns/op  |    0 B/op | 0 allocs/op
+BenchmarkAllocateSliceHeapEscape   | 5000000    |  260 ns/op  | 1024 B/op |1 allocs/op
 
 Generated using go version go1.7.5 darwin/amd64
 
@@ -53,6 +55,11 @@ in the file
 //	   and look in the corresponding mspan in this P's mcache.
 //  ...
 ```
+
+The last two benchmarks look at an optimization the Go compiler performs. If it can prove, through
+[escape analysis](https://en.wikipedia.org/wiki/Escape_analysis) that a slice does not escape the calling
+function, then it allocates the data for the slice on the stack instead of the heap. More information can
+be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/golang-nuts/KdbtOqNK6JQ).
 
 ### Bit Tricks test
 
