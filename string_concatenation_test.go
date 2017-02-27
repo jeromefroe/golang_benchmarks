@@ -68,18 +68,3 @@ func BenchmarkStringConcatenationShort(b *testing.B) {
 		_ = concatShort()
 	}
 }
-
-// buffer would have additional overhead from pool contention
-
-// The constant is known to the compiler.
-// 10	// There is no fundamental theory behind this number.
-// 11	const tmpStringBufSize = 32
-// 12
-// 13	type tmpBuf [tmpStringBufSize]byte
-// 14
-// 15	// concatstrings implements a Go string concatenation x+y+z+...
-// 16	// The operands are passed in the slice a.
-// 17	// If buf != nil, the compiler has determined that the result does not
-// 18	// escape the calling function, so the string data can be stored in buf
-// 19	// if small enough.
-// 20	func concatstrings(buf *tmpBuf, a []string) string {
