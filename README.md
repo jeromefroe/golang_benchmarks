@@ -63,7 +63,7 @@ The last two benchmarks look at an optimization the Go compiler performs. If it 
 function, then it allocates the data for the slice on the stack instead of the heap. More information can
 be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/golang-nuts/KdbtOqNK6JQ).
 
-### Bit Tricks test
+### Bit Tricks
 
 `bit_tricks_test.go`
 
@@ -82,6 +82,49 @@ does a bitwise and `&` with 1, which is equivalent. The last two benchmarks comp
 value of a number divided by 2. The first benchmark uses the division operator `/` and the second
 benchmark does a bit shift right by 1, which is equivalent. In neither case did I see any significant
 performance difference.
+
+### Atomic Operations
+
+`atomic_operations_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkAtomicLoad32  | 2000000000 | 1.77 ns/op
+BenchmarkAtomicLoad64  | 1000000000 | 1.79 ns/op
+BenchmarkAtomicStore32 |   50000000 | 27.5 ns/op
+BenchmarkAtomicStore64 |  100000000 | 25.2 ns/op
+BenchmarkAtomicAdd32   |   50000000 | 27.1 ns/op
+BenchmarkAtomicAdd64   |   50000000 | 27.8 ns/op
+BenchmarkAtomicCAS32   |   50000000 | 28.8 ns/op
+BenchmarkAtomicCAS64   |   50000000 | 28.6 ns/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+These benchmarks look at various atomic operations on 32 and 64 bit integers. The only thing that
+really stands out is that loads are significantly faster than all other operations. I suspect that
+there's two reasons for this: there's no cache invalidation because only reads are performed and
+[on x86_64 the loads and stores using `movq` are atomic if performed on natural alignments](http://preshing.com/20130618/atomic-vs-non-atomic-operations/).
+I took a look at the `Load64` function in
+[src/sync/atomic/asm_amd64.go](https://github.com/golang/go/blob/master/src/sync/atomic/asm_amd64.s):
+
+```
+TEXT ·LoadInt64(SB),NOSPLIT,$0-16
+	JMP	·LoadUint64(SB)
+
+TEXT ·LoadUint64(SB),NOSPLIT,$0-16
+	MOVQ	addr+0(FP), AX
+	MOVQ	0(AX), AX
+	MOVQ	AX, val+8(FP)
+	RET
+```
+
+It uses [Go's assembly language](https://golang.org/doc/asm) which I'm not too familiar with, but
+it appears to move the address of the integer into the AX register in the first function, move the
+value pointed to by that address into the AX register in the second instruction, and then move that
+value into the return value of the function in the third instruction. On x86_64 the Go assembly
+likely can be translated exactly using the
+[`movq` instruction](http://www.felixcloutier.com/x86/MOVQ.html) and since this instruction
+is atomic if executed on natural alignments the load will be atomic as well.
 
 ### Buffered vs Synchronous Channel
 
