@@ -4,6 +4,8 @@ Various benchmarks for different patterns in Go. Many of these are implementatio
 inspired by
 [this excellent article on performance in Go](http://bravenewgeek.com/so-you-wanna-go-fast/).
 
+> Lies, damned lies, and benchmarks.
+
 ### Allocate on Stack vs Heap
 
 `allocate_stack_vs_heap_test.go`
@@ -56,7 +58,7 @@ in the file
 //  ...
 ```
 
-The last two benchmarks look at an optimization the Go compiler performs. If it can prove, through
+The last two benchmarks look at an optimization the Go compiler performs. If it can prove through
 [escape analysis](https://en.wikipedia.org/wiki/Escape_analysis) that a slice does not escape the calling
 function, then it allocates the data for the slice on the stack instead of the heap. More information can
 be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/golang-nuts/KdbtOqNK6JQ).
@@ -194,6 +196,39 @@ Generated using go version go1.7.5 darwin/amd64
 This benchmark looks at the cost of acquiring different kinds of locks. In the first benchmark we
 don't acquire any lock. In the second benchmark we acquire a read lock on a `RWMutex`. In the third
 we acquire a write lock on a `RWMutex`. And in the last benchmark we acquire a regular `Mutex` lock.
+
+### Non-cryptographic Hash functions
+
+`non_cryptographic_hash_functions_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkHash32Fnv         | 20000000 |  72.1 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Fnva        | 20000000 |  70.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Fnv         | 20000000 |  77.8 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Fnva        | 20000000 |  68.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Crc         | 30000000 |  69.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Crc         | 10000000 |   163 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Adler       | 30000000 |  39.0 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Xxhash      | 30000000 |  62.8 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Xxhash      | 50000000 |  31.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Murmur3     | 30000000 |  53.6 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128Murmur3    | 30000000 |  49.5 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64CityHash    | 50000000 |  28.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128CityHash   | 20000000 |   109 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32FarmHash    | 30000000 |  46.2 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64FarmHash    | 50000000 |  25.3 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128FarmHash   | 50000000 |  37.3 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64SipHash     | 50000000 |  37.1 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128SipHash    | 30000000 |  44.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64HighwayHash | 50000000 |  38.8 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32SpookyHash  | 30000000 |  54.6 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64SpookyHash  | 30000000 |  53.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128SpookyHash | 30000000 |  47.4 ns/op | 0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+These benchmarks look at the speed of various non-cryptographic hash function implementations in Go.
 
 ### Pass By Value vs Reference
 
