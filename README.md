@@ -63,26 +63,6 @@ The last two benchmarks look at an optimization the Go compiler performs. If it 
 function, then it allocates the data for the slice on the stack instead of the heap. More information can
 be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/golang-nuts/KdbtOqNK6JQ).
 
-### Bit Tricks
-
-`bit_tricks_test.go`
-
-Benchmark Name|Iterations|Per-Iteration
-----|----|----
-BenchmarkMod    | 2000000000 | 0.32 ns/op
-BenchmarkAnd    | 2000000000 | 0.31 ns/op
-BenchmarkDivide | 2000000000 | 0.31 ns/op
-BenchmarkShift  | 2000000000 | 0.33 ns/op
-
-Generated using go version go1.7.5 darwin/amd64
-
-These benchmarks look at two bit fiddling techniques. The first two benchmarks compare finding the
-value of a number modulo 2. The first benchmark uses the modulus operator `%` and the second benchmark
-does a bitwise and `&` with 1, which is equivalent. The last two benchmarks compare finding the
-value of a number divided by 2. The first benchmark uses the division operator `/` and the second
-benchmark does a bit shift right by 1, which is equivalent. In neither case did I see any significant
-performance difference.
-
 ### Atomic Operations
 
 `atomic_operations_test.go`
@@ -103,7 +83,7 @@ Generated using go version go1.7.5 darwin/amd64
 These benchmarks look at various atomic operations on 32 and 64 bit integers. The only thing that
 really stands out is that loads are significantly faster than all other operations. I suspect that
 there's two reasons for this: there's no cache invalidation because only reads are performed and
-[on x86_64 the loads and stores using `movq` are atomic if performed on natural alignments](http://preshing.com/20130618/atomic-vs-non-atomic-operations/).
+[on x86_64 loads and stores using `movq` are atomic if performed on natural alignments](http://preshing.com/20130618/atomic-vs-non-atomic-operations/).
 I took a look at the `Load64` function in
 [src/sync/atomic/asm_amd64.go](https://github.com/golang/go/blob/master/src/sync/atomic/asm_amd64.s):
 
@@ -125,6 +105,26 @@ value into the return value of the function in the third instruction. On x86_64 
 likely can be translated exactly using the
 [`movq` instruction](http://www.felixcloutier.com/x86/MOVQ.html) and since this instruction
 is atomic if executed on natural alignments the load will be atomic as well.
+
+### Bit Tricks
+
+`bit_tricks_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkMod    | 2000000000 | 0.32 ns/op
+BenchmarkAnd    | 2000000000 | 0.31 ns/op
+BenchmarkDivide | 2000000000 | 0.31 ns/op
+BenchmarkShift  | 2000000000 | 0.33 ns/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+These benchmarks look at two bit fiddling techniques. The first two benchmarks compare finding the
+value of a number modulo 2. The first benchmark uses the modulus operator `%` and the second benchmark
+does a bitwise and `&` with 1, which is equivalent. The last two benchmarks compare finding the
+value of a number divided by 2. The first benchmark uses the division operator `/` and the second
+benchmark does a bit shift right by 1, which is equivalent. In neither case did I see any significant
+performance difference.
 
 ### Buffered vs Synchronous Channel
 
