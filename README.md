@@ -375,3 +375,17 @@ That is, if the compiler determines that the resulting string does not escape th
 allocate a 32 byte buffer on the stack which can be used as the underlying buffer for the string if it 32
 bytes or less. In the last benchmark, the resulting string is in fact less than 32 bytes so it can be stored
 on the stack saving a heap allocation.
+
+### Type Assertion
+
+`type_assertion_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkTypeAssertion | 2000000000 | 0.97 ns/op | 0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+This benchmark looks at the performance cost of a type assertion. I was a little surprised to find
+it was so cheap.
+
