@@ -223,6 +223,21 @@ the interface method call relies on dynamic dispatch at runtime to determine whi
 likewise the function pointer to call is determined at runtime as well and has almost identical performance
 to the interface method call.
 
+### Interface conversion
+
+`interface_conversion_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkInterfaceNoConversion | 300000000 | 4.01 ns/op | 0 B/op | 0 allocs/op
+BenchmarkInterfaceConversion   | 300000000 | 4.12 ns/op | 0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+This benchmark looks at the overhead of converting a pointer to a struct to an interface when passing
+it to a function which expects an interface. I was little surprised to find there is almost no
+overhead.
+
 ### Mutex
 
 `mutex_test.go`
