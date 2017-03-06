@@ -404,3 +404,20 @@ Generated using go version go1.7.5 darwin/amd64
 This benchmark looks at the performance cost of a type assertion. I was a little surprised to find
 it was so cheap.
 
+### Write Bytes vs String
+
+`write_bytes_vs_string_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkWriteBytes       | 100000000 | 18.7 ns/op |  0 B/op | 0 allocs/op
+BenchmarkWriteString      | 20000000  | 63.3 ns/op | 64 B/op | 1 allocs/op
+BenchmarkWriteUnafeString | 100000000 | 21.1 ns/op |  0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+Go's [`io.Writer` interface](https://golang.org/pkg/io/#Writer) only has one `Write` method which
+takes a byte slice as an argument. To pass a string to it though requires a conversion to a byte
+slice which entails a heap allocation. These benchmarks look at the performance cost of writing a
+byte slice, converting a string to a byte slice and then writing it, and using the `unsafe` and
+`reflect` packages to create a byte slice to the data underlying the string without an allocation.
