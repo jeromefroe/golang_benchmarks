@@ -350,7 +350,9 @@ struct
 [uses a lock to serialize access to its random number source](https://github.com/golang/go/blob/master/src/math/rand/rand.go#L316)
 though which can lead to contention if multiple goroutines are all trying to generate random numbers
 using the global struct. Consequently, these benchmarks look at the performance improvement that comes from
-giving each goroutine its own `Rand` struct so they don't need to acquire a lock.
+giving each goroutine its own `Rand` struct so they don't need to acquire a lock. This
+[blog post](http://blog.sgmansfield.com/2016/01/the-hidden-dangers-of-default-rand/) explores the similar
+optimizations for using the math/rand package for those who are interested.
 
 ### Slice Initialization Append vs Index
 
@@ -383,7 +385,7 @@ Generated using go version go1.7.5 darwin/amd64
 
 This benchmark looks at the three different ways to perform string concatenation, the first uses the builtin `+`
 operator, the second uses a `bytes.Buffer` and the third uses `string.Join`. It seems using `+` is preferable
-to either of the other approaches which are similar in performace.
+to either of the other approaches which are similar in performance.
 
 The last benchmark highlights a neat optimization Go performs when concatenating strings with `+`. The
 documentation for the string concatenation function in
