@@ -331,6 +331,27 @@ are these blog posts:
 and
 [How to Optimize Garbage Collection in Go](https://www.cockroachlabs.com/blog/how-to-optimize-garbage-collection-in-go/).
 
+### Rand
+
+`rand_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkGlobalRand |  20000000 | 101 ns/op | 0 B/op | 0 allocs/op
+BenchmarkLocalRand  | 200000000 |5.79 ns/op | 0 B/op | 0 allocs/op
+
+Generated using go version go1.7.5 darwin/amd64
+
+Go's [math/rand package](https://golang.org/pkg/math/rand/) exposes various functions for generating
+random numbers, for example [`Int63`](https://golang.org/pkg/math/rand/#Int63). These functions use a
+global [`Rand` struct](https://golang.org/pkg/math/rand/#Rand) which is
+[created by the package](https://github.com/golang/go/blob/master/src/math/rand/rand.go#L235). This
+struct
+[uses a lock to serialize access to its random number source](https://github.com/golang/go/blob/master/src/math/rand/rand.go#L316)
+though which can lead to contention if multiple goroutines are all trying to generate random numbers
+using the global struct. Consequently, these benchmarks look at the performance improvement that comes from
+giving each goroutine its own `Rand` struct so they don't need to acquire a lock.
+
 ### Slice Initialization Append vs Index
 
 `slice_intialization_append_vs_index_test.go`
