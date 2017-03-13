@@ -76,5 +76,4 @@ func TestUnsafeByteToStr(t *testing.T) {
 	expected := "fizzbuzz"
 	bytes := []byte(expected)
 	assert.Equal(t, expected, unsafeByteToStr(bytes))
-
 }
