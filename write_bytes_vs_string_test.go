@@ -58,6 +58,9 @@ func unsafeStrToByte(s string) []byte {
 	byteHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
 	byteHeader.Data = strHeader.Data
 
+	// need to take the length of s here to ensure s is live until after we update b's Data
+	// field since the garbage collector can collect a variable once it is no longer used
+	// not when it goes out of scope, for more details see https://github.com/golang/go/issues/9046
 	l := len(s)
 	byteHeader.Len = l
 	byteHeader.Cap = l
@@ -76,6 +79,10 @@ func unsafeByteToStr(b []byte) string {
 	var s string
 	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&s))
 	strHeader.Data = sliceHeader.Data
+
+	// need to take the length of b here to ensure b is live until after we update s's Data
+	// field since the garbage collector can collect a variable once it is no longer used
+	// not when it goes out of scope, for more details see https://github.com/golang/go/issues/9046
 	strHeader.Len = len(b)
 	return s
 }
