@@ -3,90 +3,95 @@ package main
 import (
 	"fmt"
 	"math"
+
+	"github.com/renstrom/go-jump-consistent-hash"
 )
 
 const shardSpace = 4096
 
-func hash(hash, clientsLen, replicas int) []int {
-	indexes := make([]int, 0, replicas)
+type hashFn func(hash, clientsLen, replicas int) []int64
+
+func main() {
+	fmt.Println("start  end  replicas  numMoved  moved % ideal %  diff %")
+	for i := 32; i < 40; i++ {
+		moved(i, hashOld)
+	}
+	for i := 32; i < 40; i++ {
+		moved(i, hashJump)
+	}
+}
+
+func hashOld(hash, clientsLen, replicas int) []int64 {
+	indexes := make([]int64, 0, replicas)
 
 	// Use virtual nodes to rotate by 1/n when changing the backing caches
 	vnodesPerClient := int(math.Ceil(float64(shardSpace) / float64(clientsLen)))
 	currIndex := (hash % shardSpace) / vnodesPerClient
-	indexes = append(indexes, currIndex)
+	indexes = append(indexes, int64(currIndex))
 
 	rotateBy := int(math.Ceil(float64(clientsLen) / float64(replicas)))
 	for i := 0; i < replicas-1; i++ {
 		currIndex = (currIndex + rotateBy) % clientsLen
 		containedAlready := false
 		for _, index := range indexes {
-			if index == currIndex {
+			if index == int64(currIndex) {
 				containedAlready = true
 				break
 			}
 		}
 		if !containedAlready {
-			indexes = append(indexes, currIndex)
+			indexes = append(indexes, int64(currIndex))
 		}
 	}
 
 	return indexes
 }
 
-func main() {
-	// test with only 1 replica first
-	replicas := 1
+func hashJump(hash, clientsLen, replicas int) []int64 {
+	// would need to check clientsLen > replicas in real life
 
-	initialClientsLen := 20
-	// we only need to look at shardSpace hashes because we take the hash modulo shardSpace
-	initialMappings := make(map[int][]int, shardSpace)
-	for i := 0; i < shardSpace; i++ {
-		targets := hash(i, initialClientsLen, replicas)
-		initialMappings[i] = targets
+	indexes := make([]int64, 0, replicas)
+
+	// take modulo 4096 to be consistent with hashOld
+	hash = hash % shardSpace
+
+	idx := jump.Hash(uint64(hash), int32(clientsLen))
+	for i := 0; i < replicas; i++ {
+		indexes = append(indexes, int64((idx+int32(i))%shardSpace))
 	}
 
-	updatedClientsLen := 21
-	updatedMappings := make(map[int][]int, shardSpace)
-	for i := 0; i < shardSpace; i++ {
-		targets := hash(i, updatedClientsLen, replicas)
-		updatedMappings[i] = targets
-	}
-
-	var moved int
-
-	for i := 0; i < shardSpace; i++ {
-		moved += missing(initialMappings[i], updatedMappings[i])
-	}
-
-	fmt.Println(moved)
-	fmt.Println(float64(moved) / float64(shardSpace))
-	fmt.Println(1.0 / 21.0)
-
-	// now test with 3 replicas
-	replicas = 3
-
-	initialMappings = make(map[int][]int, shardSpace)
-	for i := 0; i < shardSpace; i++ {
-		initialMappings[i] = hash(i, initialClientsLen, replicas)
-	}
-
-	updatedMappings = make(map[int][]int, shardSpace)
-	for i := 0; i < shardSpace; i++ {
-		updatedMappings[i] = hash(i, updatedClientsLen, replicas)
-	}
-
-	moved = 0
-
-	for i := 0; i < shardSpace; i++ {
-		moved += missing(initialMappings[i], updatedMappings[i])
-	}
-
-	fmt.Println(moved)
-	fmt.Println(float64(moved) / float64(3*shardSpace))
-	fmt.Println(1.0 / 21.0)
+	return indexes
 }
 
-func missing(left, right []int) int {
+func moved(numClients int, hashFn hashFn) {
+	for replicas := 1; replicas <= 5; replicas++ {
+		// we only need to look at shardSpace hashes because we take the hash modulo shardSpace
+		initialMappings := make(map[int][]int64, shardSpace)
+		for i := 0; i < shardSpace; i++ {
+			targets := hashFn(i, numClients, replicas)
+			initialMappings[i] = targets
+		}
+
+		updatedMappings := make(map[int][]int64, shardSpace)
+		for i := 0; i < shardSpace; i++ {
+			targets := hashFn(i, numClients+1, replicas)
+			updatedMappings[i] = targets
+		}
+
+		var moved int
+
+		for i := 0; i < shardSpace; i++ {
+			moved += missing(initialMappings[i], updatedMappings[i])
+		}
+
+		movedPercentage := float64(moved) / float64(shardSpace*replicas)
+		idealPercentage := 1.0 / float64(numClients+1)
+		diffPercentage := movedPercentage - idealPercentage
+		fmt.Printf("%-8d%-8d%-8d%-8d%-8.4f%-8.4f%-8.4f\n", numClients, numClients+1, replicas, moved, movedPercentage, idealPercentage, diffPercentage)
+	}
+}
+
+func missing(left, right []int64) int {
 	var missing int
 	for _, l := range left {
 		var found bool
