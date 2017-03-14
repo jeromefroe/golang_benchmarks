@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"reflect"
 	"testing"
@@ -12,7 +13,10 @@ import (
 
 const sampleStr = "It’s the job that’s never started as takes longest to finish"
 
-var sampleBytes = []byte(sampleStr)
+var (
+	sampleBytes                   = []byte(sampleStr)
+	errInvalidByteSliceConversion = errors.New("invalid byte slice passed to conversion, slice have same the same length and capacity")
+)
 
 func BenchmarkWriteBytes(b *testing.B) {
 	buf := bytes.NewBuffer(make([]byte, 0, 128))
@@ -49,21 +53,31 @@ func BenchmarkWriteUnafeString(b *testing.B) {
 
 func unsafeStrToByte(s string) []byte {
 	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	byteHeader := reflect.SliceHeader{
-		Data: strHeader.Data,
-		Len:  strHeader.Len,
-		Cap:  strHeader.Len,
-	}
-	return *(*[]byte)(unsafe.Pointer(&byteHeader))
+
+	var b []byte
+	byteHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	byteHeader.Data = strHeader.Data
+
+	l := len(s)
+	byteHeader.Len = l
+	byteHeader.Cap = l
+	return b
 }
 
 func unsafeByteToStr(b []byte) string {
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	strHeader := reflect.StringHeader{
-		Data: sliceHeader.Data,
-		Len:  sliceHeader.Len,
+
+	// need to assert that the slice's length and capacity are equal to avoid a memory leak
+	// when converting to a string
+	if len(b) != cap(b) {
+		panic(errInvalidByteSliceConversion)
 	}
-	return *(*string)(unsafe.Pointer(&strHeader))
+
+	var s string
+	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	strHeader.Data = sliceHeader.Data
+	strHeader.Len = len(b)
+	return s
 }
 
 func TestUnsafeStrToByte(t *testing.T) {
@@ -73,7 +87,7 @@ func TestUnsafeStrToByte(t *testing.T) {
 }
 
 func TestUnsafeByteToStr(t *testing.T) {
-	expected := "fizzbuzz"
-	b := []byte(expected)
+	b := []byte{'f', 'i', 'z', 'z', 'b', 'u', 'z', 'z'}
+	expected := string(b)
 	assert.Equal(t, expected, unsafeByteToStr(b))
 }
