@@ -2,8 +2,6 @@ package main
 
 import "testing"
 
-// go test -bench Call -benchmem
-
 type Doer interface {
 	Do()
 }
@@ -14,8 +12,10 @@ type A struct {
 	Po Po
 }
 
+//go:noinline
 func (s *A) Do() {}
 
+//go:noinline
 func po() {}
 
 func BenchmarkPointerToStructMethodCall(b *testing.B) {
@@ -38,5 +38,3 @@ func BenchmarkFunctionPointerCall(b *testing.B) {
 		a.Po()
 	}
 }
-
-// TODO(jeromefroe): method call vs function field call, ie x.Foo() where Foo is a field, not a method
