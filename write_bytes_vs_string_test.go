@@ -52,11 +52,14 @@ func BenchmarkWriteUnafeString(b *testing.B) {
 }
 
 func unsafeStrToByte(s string) []byte {
-	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&s))
-
 	var b []byte
 	byteHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	byteHeader.Data = strHeader.Data
+
+	// we need to take the address of s's Data field and assign it to b's Data field in one
+	// expression as it as a uintptr and in the future Go may have a compacting GC that moves
+	// pointers but it will not update uintptr values, but single expressions should be safe.
+	// For more details see https://groups.google.com/forum/#!msg/golang-dev/rd8XgvAmtAA/p6r28fbF1QwJ
+	byteHeader.Data = (*reflect.StringHeader)(unsafe.Pointer(&s)).Data
 
 	// need to take the length of s here to ensure s is live until after we update b's Data
 	// field since the garbage collector can collect a variable once it is no longer used
@@ -68,8 +71,6 @@ func unsafeStrToByte(s string) []byte {
 }
 
 func unsafeByteToStr(b []byte) string {
-	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-
 	// need to assert that the slice's length and capacity are equal to avoid a memory leak
 	// when converting to a string
 	if len(b) != cap(b) {
@@ -78,7 +79,12 @@ func unsafeByteToStr(b []byte) string {
 
 	var s string
 	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	strHeader.Data = sliceHeader.Data
+
+	// we need to take the address of b's Data field and assign it to s's Data field in one
+	// expression as it as a uintptr and in the future Go may have a compacting GC that moves
+	// pointers but it will not update uintptr values, but single expressions should be safe.
+	// For more details see https://groups.google.com/forum/#!msg/golang-dev/rd8XgvAmtAA/p6r28fbF1QwJ
+	strHeader.Data = (*reflect.SliceHeader)(unsafe.Pointer(&b)).Data
 
 	// need to take the length of b here to ensure b is live until after we update s's Data
 	// field since the garbage collector can collect a variable once it is no longer used
