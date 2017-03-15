@@ -15,17 +15,19 @@ const shardSpace = 4096
 type newHasherFn func(servers []string, replicas int) hasher
 
 type hasher interface {
-	Resolve(hash int) []string
+	Resolve(hash int, replica uint) string
 }
 
 func main() {
+	srvLow := 32
+	srvHigh := 40
 	replicasLow := 3
 	replicasHigh := 3
 
 	fmt.Println("hashringmap")
 	fmt.Println("--")
 	fmt.Println("start  end  replicas  numMoved  moved % ideal %  diff %")
-	for i := 32; i < 40; i++ {
+	for i := srvLow; i < srvHigh; i++ {
 		moved(i, replicasLow, replicasHigh, func(servers []string, replicas int) hasher {
 			ring := newHashRingMap(replicas)
 			ring.Add(servers...)
@@ -35,7 +37,7 @@ func main() {
 	fmt.Println("hashjump")
 	fmt.Println("--")
 	fmt.Println("start  end  replicas  numMoved  moved % ideal %  diff %")
-	for i := 32; i < 40; i++ {
+	for i := srvLow; i < srvHigh; i++ {
 		moved(i, replicasLow, replicasHigh, func(servers []string, replicas int) hasher {
 			jump := newHashJump(replicas)
 			jump.Add(servers...)
@@ -71,61 +73,61 @@ func (m *hashRingMap) Add(instances ...string) {
 	sort.Ints(m.instances)
 }
 
-func (m *hashRingMap) Resolve(v int) []string {
+func (m *hashRingMap) Resolve(v int, replica uint) string {
+	return m.hashMap[m.instances[m.index(v, replica)]]
+}
+
+func (m *hashRingMap) index(v int, replica uint) int {
+	if replica > 0 {
+		v += int(replica)
+	}
+
 	var buffer [8]byte
 	key := buffer[:8]
 	binary.LittleEndian.PutUint64(key, uint64(v))
 	hash := int(m.hash(key))
 
-	servers := make([]string, 0, m.replicas)
-
-	idx := sort.Search(len(m.instances), func(i int) bool { return m.instances[i] >= hash })
+	idx := sort.SearchInts(m.instances, hash)
 	if idx == len(m.instances) {
 		idx = 0
 	}
 
-	servers = append(servers, m.hashMap[m.instances[idx]])
-	for i := 0; i < m.replicas-1; i++ {
-		idx = (idx + 1) % len(m.instances)
-		servers = append(servers, m.hashMap[m.instances[idx]])
-	}
-
-	return servers
+	return idx
 }
 
 type hashJump struct {
+	hash     func(b []byte) uint32
 	servers  []string
 	replicas int
 }
 
 func newHashJump(replicas int) *hashJump {
-	return &hashJump{replicas: replicas}
+	return &hashJump{
+		hash:     murmur3.Sum32,
+		replicas: replicas,
+	}
 }
 
 func (j *hashJump) Add(instances ...string) {
 	j.servers = append(j.servers, instances...)
 }
 
-func (j *hashJump) Resolve(hash int) []string {
-	servers := make([]string, 0, j.replicas)
-
-	idx := int(jump.Hash(uint64(hash), int32(len(j.servers))))
-	for i := 0; i < j.replicas; i++ {
-		servers = append(servers, j.servers[idx%len(j.servers)])
-		idx++
-	}
-
-	return servers
+func (j *hashJump) Resolve(hash int, replica uint) string {
+	return j.servers[int(jump.Hash(uint64(hash+int(replica)), int32(len(j.servers))))]
 }
 
 func moved(numServers int, replicasLow, replicasHigh int, newHasherFn newHasherFn) {
 	for replicas := replicasLow; replicas <= replicasHigh; replicas++ {
 		// we only need to look at shardSpace hashes because we take the hash modulo shardSpace
-		hasher := newHasherFn(newServers(numServers), replicas)
+		servers := newServers(numServers)
+		hasher := newHasherFn(servers, replicas)
 
 		initialMappings := make(map[int][]string, shardSpace)
 		for i := 0; i < shardSpace; i++ {
-			targets := hasher.Resolve(i)
+			var targets []string
+			for r := uint(0); r < uint(replicas); r++ {
+				targets = append(targets, hasher.Resolve(i, r))
+			}
 			initialMappings[i] = targets
 		}
 
@@ -133,7 +135,10 @@ func moved(numServers int, replicasLow, replicasHigh int, newHasherFn newHasherF
 
 		updatedMappings := make(map[int][]string, shardSpace)
 		for i := 0; i < shardSpace; i++ {
-			targets := hasher.Resolve(i)
+			var targets []string
+			for r := uint(0); r < uint(replicas); r++ {
+				targets = append(targets, hasher.Resolve(i, r))
+			}
 			updatedMappings[i] = targets
 		}
 
