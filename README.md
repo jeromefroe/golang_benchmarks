@@ -112,12 +112,12 @@ is atomic if executed on natural alignments the load will be atomic as well.
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
-BenchmarkBitTricksModPowerOfTwo-4               2000000000               0.84 ns/op
-BenchmarkBitTricksModNonPowerOfTwo-4            2000000000               1.58 ns/op
-BenchmarkBitTricksAnd-4                         2000000000               0.46 ns/op
-BenchmarkBitTricksDividePowerOfTwo-4            2000000000               0.72 ns/op
-BenchmarkBitTricksDivideNonPowerOfTwo-4         2000000000               1.09 ns/op
-BenchmarkBitTricksShift-4                       2000000000               0.52 ns/op
+BenchmarkBitTricksModPowerOfTwo       | 2000000000 | 0.84 ns/op
+BenchmarkBitTricksModNonPowerOfTwo    | 2000000000 | 1.58 ns/op
+BenchmarkBitTricksAnd                 | 2000000000 | 0.46 ns/op
+BenchmarkBitTricksDividePowerOfTwo    | 2000000000 | 0.72 ns/op
+BenchmarkBitTricksDivideNonPowerOfTwo | 2000000000 | 1.09 ns/op
+BenchmarkBitTricksShift               | 2000000000 | 0.52 ns/op
 
 Generated using go version go1.8.1 darwin/amd64
 
@@ -338,8 +338,8 @@ and
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkGlobalRand |  20000000 | 101 ns/op | 0 B/op | 0 allocs/op
-BenchmarkLocalRand  | 200000000 |5.79 ns/op | 0 B/op | 0 allocs/op
+BenchmarkGlobalRand |  20000000 |  101 ns/op | 0 B/op | 0 allocs/op
+BenchmarkLocalRand  | 200000000 | 5.79 ns/op | 0 B/op | 0 allocs/op
 
 Generated using go version go1.7.5 darwin/amd64
 
@@ -361,10 +361,10 @@ optimizations for using the math/rand package for those who are interested.
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
-BenchmarkReduceModuloPowerOfTwo-4               500000000                3.41 ns/op
-BenchmarkReduceModuloNonPowerOfTwo-4            500000000                3.44 ns/op
-BenchmarkReduceAlternativePowerOfTwo-4          2000000000               0.84 ns/op
-BenchmarkReduceAlternativeNonPowerOfTwo-4       2000000000               0.84 ns/op
+BenchmarkReduceModuloPowerOfTwo         | 500000000  | 3.41 ns/op
+BenchmarkReduceModuloNonPowerOfTwo      | 500000000  | 3.44 ns/op
+BenchmarkReduceAlternativePowerOfTwo    | 2000000000 | 0.84 ns/op
+BenchmarkReduceAlternativeNonPowerOfTwo | 2000000000 | 0.84 ns/op
 
 Generated using go version go1.8.1 darwin/amd64
 
