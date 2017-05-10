@@ -355,6 +355,37 @@ giving each goroutine its own `Rand` struct so they don't need to acquire a lock
 [blog post](http://blog.sgmansfield.com/2016/01/the-hidden-dangers-of-default-rand/) explores the similar
 optimizations for using the math/rand package for those who are interested.
 
+### Reducing an Integer
+
+`reduction_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkReduceModuloPowerOfTwo-4               500000000                3.41 ns/op
+BenchmarkReduceModuloNonPowerOfTwo-4            500000000                3.44 ns/op
+BenchmarkReduceAlternativePowerOfTwo-4          2000000000               0.84 ns/op
+BenchmarkReduceAlternativeNonPowerOfTwo-4       2000000000               0.84 ns/op
+
+Generated using go version go1.8.1 darwin/amd64
+
+This benchmark compares two different approaches for reducing an integer into a given range. The first
+two benchmarks use the traditional approach of taking the modulus of a given integer with the length
+of the range that we want to reduce the integer into. The latter two benchmarks implement an alternative
+approach that was described in
+[A fast alternative to the modulo reduction](http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/).
+As the benchmarks show the alternative approach provides superior performance. This alternative
+implementation was invented because modulus division is a slow instruction on modern processors in
+comparison to other common instructions, and while one could replace a modulus division
+by a power of two with a bitwise AND one cannot do the same for a value which is not a power of two.
+This alternative approach is fair in that every integer in the range [0,N) will have either
+ceil(2^32/N) or floor(s^32/N) integers in the range [0,2^32) mapped to it. However, unlike modulus
+division which preserves the lower bits of information (so that k and k+1 will be mapped to different
+integers if N != 1) the alternative implementation instead preserves the higher order bits (so k and
+k+1 have a much higher likelohood of being mapped to the same integer) which means it can't be used
+in hashmaps which use probing to resolve collisions since probing often adds the probe bias to the
+lower bits (for example, linear probing adds 1 to the hash value) though one can certainly imagine
+using a probing function which adds the probe bias to the higher order bits.
+
 ### Slice Initialization Append vs Index
 
 `slice_intialization_append_vs_index_test.go`
