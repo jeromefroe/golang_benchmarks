@@ -2,34 +2,40 @@ package main
 
 import "testing"
 
-func BenchmarkMod(b *testing.B) {
-	var n int
+var btGlobal int
+
+func BenchmarkBitTricksModPowerOfTwo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		n = i % 2
+		btGlobal = i % 256
 	}
-	_ = n
 }
 
-func BenchmarkAnd(b *testing.B) {
-	var n int
+func BenchmarkBitTricksModNonPowerOfTwo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		n = i & 1
+		btGlobal = i % 257
 	}
-	_ = n
 }
 
-func BenchmarkDivide(b *testing.B) {
-	var n int
+func BenchmarkBitTricksAnd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		n = i / 2
+		btGlobal = i & 256
 	}
-	_ = n
 }
 
-func BenchmarkShift(b *testing.B) {
-	var n int
+func BenchmarkBitTricksDividePowerOfTwo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		n = i >> 1
+		btGlobal = i / 256
 	}
-	_ = n
+}
+
+func BenchmarkBitTricksDivideNonPowerOfTwo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		btGlobal = i / 257
+	}
+}
+
+func BenchmarkBitTricksShift(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		btGlobal = i >> 8
+	}
 }

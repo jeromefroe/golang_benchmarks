@@ -112,19 +112,20 @@ is atomic if executed on natural alignments the load will be atomic as well.
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
-BenchmarkMod    | 2000000000 | 0.32 ns/op
-BenchmarkAnd    | 2000000000 | 0.31 ns/op
-BenchmarkDivide | 2000000000 | 0.31 ns/op
-BenchmarkShift  | 2000000000 | 0.33 ns/op
+BenchmarkBitTricksModPowerOfTwo-4               2000000000               0.84 ns/op
+BenchmarkBitTricksModNonPowerOfTwo-4            2000000000               1.58 ns/op
+BenchmarkBitTricksAnd-4                         2000000000               0.46 ns/op
+BenchmarkBitTricksDividePowerOfTwo-4            2000000000               0.72 ns/op
+BenchmarkBitTricksDivideNonPowerOfTwo-4         2000000000               1.09 ns/op
+BenchmarkBitTricksShift-4                       2000000000               0.52 ns/op
 
-Generated using go version go1.7.5 darwin/amd64
+Generated using go version go1.8.1 darwin/amd64
 
-These benchmarks look at two bit fiddling techniques. The first two benchmarks compare finding the
-value of a number modulo 2. The first benchmark uses the modulus operator `%` and the second benchmark
-does a bitwise and `&` with 1, which is equivalent. The last two benchmarks compare finding the
-value of a number divided by 2. The first benchmark uses the division operator `/` and the second
-benchmark does a bit shift right by 1, which is equivalent. In neither case did I see any significant
-performance difference.
+These benchmarks look at some micro optimizations that can be performed when doing division or
+modulo division. The first three benchmarks show the overhead of doing modulus division and how
+we can replace modulus division by a power of two with a bitwise and, which is a faster operation.
+Likewise the last three benchmarks show the overhead of division and how we can improve the speed
+of division by a power of two by performing a right shift.
 
 ### Buffered vs Synchronous Channel
 
