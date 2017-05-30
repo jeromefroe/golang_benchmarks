@@ -247,14 +247,13 @@ to the interface method call.
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkInterfaceNoConversion | 300000000 | 4.01 ns/op | 0 B/op | 0 allocs/op
-BenchmarkInterfaceConversion   | 300000000 | 4.12 ns/op | 0 B/op | 0 allocs/op
+BenchmarkInterfaceConversion   | 2000000000 | 1.32 ns/op | 0 B/op | 0 allocs/op
+BenchmarkNoInterfaceConversion | 2000000000 | 0.85 ns/op | 0 B/op | 0 allocs/op
 
-Generated using go version go1.7.5 darwin/amd64
+Generated using go version go1.8.1 darwin/amd64
 
-This benchmark looks at the overhead of converting a pointer to a struct to an interface when passing
-it to a function which expects an interface. I was a little surprised to find there is almost no
-overhead.
+This benchmark looks at the overhead of converting an interface to its concrete type. Surprisingly,
+the overhead of the type assertion, while not zero, it pretty minimal at only about 0.5 nanoseconds.
 
 ### Mutex
 

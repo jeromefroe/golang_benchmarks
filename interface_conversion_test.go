@@ -3,7 +3,8 @@ package main
 import "testing"
 
 var (
-	dogBark string
+	myDog    dog
+	myPoodle *poodle
 )
 
 type dog interface {
@@ -14,20 +15,18 @@ type poodle struct{}
 
 func (p *poodle) bark() string { return "woof" }
 
-func playWithDog(d dog) string { return d.bark() }
-
-func BenchmarkInterfaceNoConversion(b *testing.B) {
+func BenchmarkInterfaceConversion(b *testing.B) {
 	var d dog = &poodle{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		dogBark = playWithDog(d)
+		myDog = d.(*poodle)
 	}
 }
 
-func BenchmarkInterfaceConversion(b *testing.B) {
+func BenchmarkNoInterfaceConversion(b *testing.B) {
 	p := &poodle{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		dogBark = playWithDog(p)
+		myPoodle = p
 	}
 }
