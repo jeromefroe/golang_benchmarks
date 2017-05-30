@@ -253,7 +253,7 @@ BenchmarkInterfaceConversion   | 300000000 | 4.12 ns/op | 0 B/op | 0 allocs/op
 Generated using go version go1.7.5 darwin/amd64
 
 This benchmark looks at the overhead of converting a pointer to a struct to an interface when passing
-it to a function which expects an interface. I was little surprised to find there is almost no
+it to a function which expects an interface. I was a little surprised to find there is almost no
 overhead.
 
 ### Mutex
