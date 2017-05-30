@@ -63,6 +63,23 @@ The last two benchmarks look at an optimization the Go compiler performs. If it 
 function, then it allocates the data for the slice on the stack instead of the heap. More information can
 be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/golang-nuts/KdbtOqNK6JQ).
 
+### Append
+
+`append_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkAppendLoop     |   500000 | 2456 ns/op | 0 B/op | 0 allocs/op
+BenchmarkAppendVariadic | 20000000 | 97.1 ns/op | 0 B/op | 0 allocs/op
+
+Generated using go version go1.8.1 darwin/amd64
+
+This benchmark looks at the performance difference between appending the values
+of one slice into another slice one by one, i.e. `dst = append(dst, src[i])`,
+versus appending them all at once, i.e. `dst = append(dst, src...)`. As the
+benchmarks show, using the variadic approach is faster. My suspicion is that this
+is because the compiler can optimize this away into a single `memcpy`.
+
 ### Atomic Operations
 
 `atomic_operations_test.go`
