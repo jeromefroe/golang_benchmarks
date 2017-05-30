@@ -355,6 +355,29 @@ giving each goroutine its own `Rand` struct so they don't need to acquire a lock
 [blog post](http://blog.sgmansfield.com/2016/01/the-hidden-dangers-of-default-rand/) explores the similar
 optimizations for using the math/rand package for those who are interested.
 
+### Random Bounded Numbers
+
+`random_bounded_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkStandardBoundedRandomNumber     | 100000000 | 18.3 ns/op
+BenchmarkBiasedFastBoundedRandomNumber   | 100000000 | 11.0 ns/op
+BenchmarkUnbiasedFastBoundedRandomNumber | 50000000  | 40.5 ns/op
+
+Generated using go version go1.8.1 darwin/amd64
+
+Benchmarks for three different algorithims for generating a random bounded number
+as discussed in the blog post
+[Fast random shuffling](http://lemire.me/blog/2016/06/30/fast-random-shuffling/).
+The top result is the standard approach of generating a random number and taking
+its modulus of the bound. The second approach implements the algorithim discussed
+in the aforementioned blog post which avoids using the modulus operator. The third
+algorithim is an implementation of the second algorithim which is unbiased. As
+mentioned in the article, for most applications the second algorithim will be
+sufficient enough as the bias introduced by the algorithim is likely less than
+the bias from the pseudo-random number generator which is used.
+
 ### Reducing an Integer
 
 `reduction_test.go`
