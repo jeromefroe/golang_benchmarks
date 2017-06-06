@@ -195,9 +195,7 @@ func BenchmarkHash128SpookyHash(b *testing.B) {
 }
 
 func BenchmarkHashMD5(b *testing.B) {
-	h := md5.New()
-	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		h.Sum(testBytes)
+		md5.Sum(testBytes)
 	}
 }
