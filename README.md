@@ -278,28 +278,29 @@ we acquire a write lock on a `RWMutex`. And in the last benchmark we acquire a r
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkHash32Fnv         | 20000000 |  72.1 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32Fnva        | 20000000 |  70.4 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64Fnv         | 20000000 |  77.8 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64Fnva        | 20000000 |  68.9 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32Crc         | 30000000 |  69.4 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64Crc         | 10000000 |   163 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32Adler       | 30000000 |  39.0 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32Xxhash      | 30000000 |  62.8 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64Xxhash      | 50000000 |  31.4 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32Murmur3     | 30000000 |  53.6 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash128Murmur3    | 30000000 |  49.5 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64CityHash    | 50000000 |  28.9 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash128CityHash   | 20000000 |   109 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32FarmHash    | 30000000 |  46.2 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64FarmHash    | 50000000 |  25.3 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash128FarmHash   | 50000000 |  37.3 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64SipHash     | 50000000 |  37.1 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash128SipHash    | 30000000 |  44.9 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64HighwayHash | 50000000 |  38.8 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash32SpookyHash  | 30000000 |  54.6 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash64SpookyHash  | 30000000 |  53.4 ns/op | 0 B/op | 0 allocs/op
-BenchmarkHash128SpookyHash | 30000000 |  47.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Fnv         | 20000000 |  72.1 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32Fnva        | 20000000 |  70.4 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64Fnv         | 20000000 |  77.8 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64Fnva        | 20000000 |  68.9 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32Crc         | 30000000 |  69.4 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64Crc         | 10000000 |   163 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32Adler       | 30000000 |  39.0 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32Xxhash      | 30000000 |  62.8 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64Xxhash      | 50000000 |  31.4 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32Murmur3     | 30000000 |  53.6 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash128Murmur3    | 30000000 |  49.5 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64CityHash    | 50000000 |  28.9 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash128CityHash   | 20000000 |   109 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32FarmHash    | 30000000 |  46.2 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64FarmHash    | 50000000 |  25.3 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash128FarmHash   | 50000000 |  37.3 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64SipHash     | 50000000 |  37.1 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash128SipHash    | 30000000 |  44.9 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64HighwayHash | 50000000 |  38.8 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash32SpookyHash  | 30000000 |  54.6 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash64SpookyHash  | 30000000 |  53.4 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHash128SpookyHash | 30000000 |  47.4 ns/op |   0 B/op | 0 allocs/op
+BenchmarkHashMD5           | 10000000 |   211 ns/op | 112 B/op | 1 allocs/op
 
 Generated using go version go1.7.5 darwin/amd64
 

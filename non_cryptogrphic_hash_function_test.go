@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/md5"
 	"hash/adler32"
 	"hash/crc32"
 	"hash/crc64"
@@ -190,5 +191,13 @@ func BenchmarkHash128SpookyHash(b *testing.B) {
 	k1 := uint64(rand.Int63())
 	for i := 0; i < b.N; i++ {
 		spooky.Hash128(testBytes, &k0, &k1)
+	}
+}
+
+func BenchmarkHashMD5(b *testing.B) {
+	h := md5.New()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		h.Sum(testBytes)
 	}
 }
