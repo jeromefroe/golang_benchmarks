@@ -3,6 +3,8 @@
 Various benchmarks for different patterns in Go. Many of these are implementations of or were
 inspired by
 [this excellent article on performance in Go](http://bravenewgeek.com/so-you-wanna-go-fast/).
+Furthemore, the Golang wiki provides a
+[list of compiler optimizations](https://github.com/golang/go/wiki/CompilerOptimizations).
 
 > Lies, damned lies, and benchmarks.
 
