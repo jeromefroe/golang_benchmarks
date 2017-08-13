@@ -1,0 +1,25 @@
+package: github.com/jeromefroe/golang_benchmarks
+import: []
+testImport:
+- package: github.com/OneOfOne/xxhash
+  version: 9f129ced0523605cdde14a954ae4609e366a7998
+- package: github.com/Workiva/go-datastructures
+  version: b9547a38b81ee66409d34781495d771dfa1e7e41
+  subpackages:
+  - queue
+- package: github.com/dchest/siphash
+  version: 4ebf1de738443ea7f45f02dc394c4df1942a126d
+- package: github.com/dgryski/go-farm
+  version: e2d0fe22b456fa0a35cd883ba355ecfcf1881490
+- package: github.com/dgryski/go-highway
+  version: 17171d698d9c22164cb429962abc409ef514d3b2
+- package: github.com/dgryski/go-spooky
+  version: ed3d087f40e29d80bfe4d9c1c1f2d4885eb1b82a
+- package: github.com/spaolacci/murmur3
+  version: 4ec5a0f56d4fc178129a8433576bf6f2fe672a9e
+- package: github.com/stretchr/testify
+  version: ~1.1.4
+  subpackages:
+  - assert
+- package: github.com/zhenjl/cityhash
+  version: cdd6a94144ab18dd21ad865a3aa6837585bffa15

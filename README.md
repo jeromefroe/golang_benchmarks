@@ -169,16 +169,16 @@ another object into it.
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkChannelSPSC    | 10000000  |        140 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkRingBufferSPSC | 20000000  |        106 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkChannelSPMC    |  5000000  |        369 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkRingBufferSPMC |  5000000  |        341 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkChannelMPSC    |  3000000  |        417 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkRingBufferMPSC |   500000  |       8387 ns/op  |     8 B/op |    1 allocs/op
-BenchmarkChannelMPMC    |       20  |   70112786 ns/op  | 10532 B/op | 1031 allocs/op
-BenchmarkRingBufferMPMC |        1  | 1228960979 ns/op  | 14256 B/op | 1015 allocs/op
+BenchmarkChannelSPSC    | 20000000 |      102 ns/op   |    8 B/op |    1 allocs/op
+BenchmarkRingBufferSPSC | 20000000 |     72.2 ns/op   |    8 B/op |    1 allocs/op
+BenchmarkChannelSPMC    |  3000000 |      464 ns/op   |    8 B/op |    1 allocs/op
+BenchmarkRingBufferSPMC |  1000000 |     1065 ns/op   |    8 B/op |    1 allocs/op
+BenchmarkChannelMPSC    |  3000000 |      447 ns/op   |    8 B/op |    1 allocs/op
+BenchmarkRingBufferMPSC |   300000 |     5033 ns/op   |    9 B/op |    1 allocs/op
+BenchmarkChannelMPMC    |    10000 |   193557 ns/op   | 8016 B/op | 1000 allocs/op
+BenchmarkRingBufferMPMC |       30 | 34618237 ns/op   | 8000 B/op | 1000 allocs/op
 
-Generated using go version go1.7.5 darwin/amd64
+Generated using go version go1.8.3 darwin/amd64
 
 The blog post [So You Wanna Go Fast?](http://bravenewgeek.com/so-you-wanna-go-fast/) also took a look at using
 channels versus using a
@@ -304,7 +304,34 @@ BenchmarkHash64SpookyHash  | 30000000 |  53.4 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHash128SpookyHash | 30000000 |  47.4 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHashMD5           | 10000000 |   168 ns/op | 0 B/op | 0 allocs/op
 
-Generated using go version go1.7.5 darwin/amd64
+
+BenchmarkHash32Fnv         | 20000000 |  71.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Fnva        | 20000000 |  70.1 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Fnv         | 20000000 |  71.8 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Fnva        | 20000000 |  70.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Crc         | 30000000 |  50.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Crc         | 10000000 |   139 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Adler       | 30000000 |  38.2 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Xxhash      | 30000000 |  43.5 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64Xxhash      | 30000000 |  36.5 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32Murmur3     | 30000000 |  50.3 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128Murmur3    | 30000000 |  47.0 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64CityHash    | 50000000 |  29.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128CityHash   | 20000000 |   109 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32FarmHash    | 30000000 |  39.8 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64FarmHash    | 50000000 |  24.2 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128FarmHash   | 50000000 |  36.1 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64SipHash     | 50000000 |  35.6 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128SipHash    | 30000000 |  43.7 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64HighwayHash | 30000000 |  36.9 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash32SpookyHash  | 30000000 |  53.7 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash64SpookyHash  | 20000000 |  62.3 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHash128SpookyHash | 20000000 |  66.5 ns/op | 0 B/op | 0 allocs/op
+BenchmarkHashMD5           | 10000000 |   182 ns/op | 0 B/op | 0 allocs/op
+
+
+
+Generated using go version go1.8.3 darwin/amd64
 
 These benchmarks look at the speed of various non-cryptographic hash function implementations in Go.
 
