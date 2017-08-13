@@ -1,5 +1,5 @@
-hash: c41945ae65f03325a883800f4883392ea131d93db74b3312249a509af8b551b2
-updated: 2017-08-13T12:49:42.868706638-04:00
+hash: 44bb5f31b73e33dab4e3b22f756a7855d83c3e501582c76505c06897d14e65fd
+updated: 2017-08-13T13:06:21.86898348-04:00
 imports: []
 testImports:
 - name: github.com/davecgh/go-spew
@@ -14,20 +14,36 @@ testImports:
   version: 17171d698d9c22164cb429962abc409ef514d3b2
 - name: github.com/dgryski/go-spooky
   version: ed3d087f40e29d80bfe4d9c1c1f2d4885eb1b82a
+- name: github.com/glycerine/go-unsnap-stream
+  version: 87275cecd8e984c5875577d22da7ce8945df780e
+- name: github.com/golang/snappy
+  version: d7b1e156f50d3c4664f683603af70e3e47fa0aa2
 - name: github.com/intel-go/cpuid
   version: 14e30a176083de28aacc003e865f9fe7a1fe5403
+- name: github.com/mschoch/smat
+  version: 90eadee771aeab36e8bf796039b8c261bebebe4f
 - name: github.com/OneOfOne/xxhash
   version: 9f129ced0523605cdde14a954ae4609e366a7998
+- name: github.com/philhofer/fwd
+  version: 1612a298117663d7bc9a760ae20d383413859798
 - name: github.com/pmezard/go-difflib
   version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
   - difflib
+- name: github.com/RoaringBitmap/roaring
+  version: a8594f16ca7dac7d9683315c1b4044d5b358894f
 - name: github.com/spaolacci/murmur3
   version: 4ec5a0f56d4fc178129a8433576bf6f2fe672a9e
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert
+- name: github.com/tinylib/msgp
+  version: 701aacd80f9ace06ea698bd7801c361fb7fe580b
+  subpackages:
+  - msgp
+- name: github.com/willf/bitset
+  version: 988f4f24992fc745de53c42df0da6581e42a6686
 - name: github.com/Workiva/go-datastructures
   version: b9547a38b81ee66409d34781495d771dfa1e7e41
   subpackages:

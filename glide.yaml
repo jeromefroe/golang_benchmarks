@@ -1,8 +1,9 @@
 package: github.com/jeromefroe/golang_benchmarks
-import: []
 testImport:
 - package: github.com/OneOfOne/xxhash
   version: 9f129ced0523605cdde14a954ae4609e366a7998
+- package: github.com/RoaringBitmap/roaring
+  version: a8594f16ca7dac7d9683315c1b4044d5b358894f
 - package: github.com/Workiva/go-datastructures
   version: b9547a38b81ee66409d34781495d771dfa1e7e41
   subpackages:
@@ -21,5 +22,7 @@ testImport:
   version: ~1.1.4
   subpackages:
   - assert
+- package: github.com/willf/bitset
+  version: 988f4f24992fc745de53c42df0da6581e42a6686
 - package: github.com/zhenjl/cityhash
   version: cdd6a94144ab18dd21ad865a3aa6837585bffa15
