@@ -378,6 +378,28 @@ are these blog posts:
 and
 [How to Optimize Garbage Collection in Go](https://www.cockroachlabs.com/blog/how-to-optimize-garbage-collection-in-go/).
 
+### Pool Put Non Interface
+
+`pool_put_non_interface_test.go`
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkPoolM3XPutSlice           |  5000000 | 282 ns/op | 32 B/op | 1 allocs/op
+BenchmarkPoolM3XPutPointerToSlice  |  5000000 | 327 ns/op |  0 B/op | 0 allocs/op
+BenchmarkPoolSyncPutSlice          | 10000000 | 184 ns/op | 32 B/op | 1 allocs/op
+BenchmarkPoolSyncPutPointerToSlice | 10000000 | 177 ns/op |  0 B/op | 0 allocs/op
+
+Generated using go version go1.8.3 darwin/amd64
+
+This benchmark looks at the cost of pooling slices. Since slices are three words they cannot be
+coerced into interfaces without an allocation, see the
+[comments on this CL](https://go-review.googlesource.com/c/24371) for more details. Consequently,
+putting a slice in a pool requires the three words for the slice to be allocated on the heap.
+This cost will admittedly likely be offset by the savings from pooling the actual data backing
+the slice, however this test looks performs the benchmarks to look at just that. Indeed we see
+that although the putting a slice on a pool does require an additional allocation, there does not
+appear to be a significant cost in speed.
+
 ### Rand
 
 `rand_test.go`

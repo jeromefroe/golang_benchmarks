@@ -16,6 +16,10 @@ testImport:
   version: 17171d698d9c22164cb429962abc409ef514d3b2
 - package: github.com/dgryski/go-spooky
   version: ed3d087f40e29d80bfe4d9c1c1f2d4885eb1b82a
+- package: github.com/m3db/m3x
+  version: fa84f5989c6d5f2c8d867be7a22b3186209407ea
+  subpackages:
+  - pool
 - package: github.com/spaolacci/murmur3
   version: 4ec5a0f56d4fc178129a8433576bf6f2fe672a9e
 - package: github.com/stretchr/testify
