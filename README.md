@@ -303,8 +303,6 @@ BenchmarkHash32SpookyHash  | 30000000 |  54.6 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHash64SpookyHash  | 30000000 |  53.4 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHash128SpookyHash | 30000000 |  47.4 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHashMD5           | 10000000 |   168 ns/op | 0 B/op | 0 allocs/op
-
-
 BenchmarkHash32Fnv         | 20000000 |  71.9 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHash32Fnva        | 20000000 |  70.1 ns/op | 0 B/op | 0 allocs/op
 BenchmarkHash64Fnv         | 20000000 |  71.8 ns/op | 0 B/op | 0 allocs/op
