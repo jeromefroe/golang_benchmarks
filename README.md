@@ -404,10 +404,12 @@ appear to be a significant cost in speed.
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
-BenchmarkGlobalRand |  20000000 |  101 ns/op | 0 B/op | 0 allocs/op
-BenchmarkLocalRand  | 200000000 | 5.79 ns/op | 0 B/op | 0 allocs/op
+BenchmarkGlobalRandInt63   |  20000000 |    115 ns/op | 0 B/op | 0 allocs/op
+BenchmarkLocalRandInt63    | 300000000 |   3.95 ns/op | 0 B/op | 0 allocs/op
+BenchmarkGlobalRandFloat64 |  20000000 |   96.5 ns/op | 0 B/op | 0 allocs/op
+BenchmarkLocalRandFloat64  | 200000000 |   6.00 ns/op | 0 B/op | 0 allocs/op
 
-Generated using go version go1.7.5 darwin/amd64
+Generated using go version go1.8.3 darwin/amd64
 
 Go's [math/rand package](https://golang.org/pkg/math/rand/) exposes various functions for generating
 random numbers, for example [`Int63`](https://golang.org/pkg/math/rand/#Int63). These functions use a
