@@ -13,6 +13,7 @@ import (
 	"github.com/dchest/siphash"
 	"github.com/dgryski/go-farm"
 	"github.com/dgryski/go-highway"
+	metro "github.com/dgryski/go-metro"
 	"github.com/dgryski/go-spooky"
 	"github.com/spaolacci/murmur3"
 	"github.com/zhenjl/cityhash"
@@ -152,16 +153,16 @@ func BenchmarkHash128FarmHash(b *testing.B) {
 }
 
 func BenchmarkHash64SipHash(b *testing.B) {
-	k0 := uint64(rand.Int63())
-	k1 := uint64(rand.Int63())
+	k0 := rand.Uint64()
+	k1 := rand.Uint64()
 	for i := 0; i < b.N; i++ {
 		siphash.Hash(k0, k1, testBytes)
 	}
 }
 
 func BenchmarkHash128SipHash(b *testing.B) {
-	k0 := uint64(rand.Int63())
-	k1 := uint64(rand.Int63())
+	k0 := rand.Uint64()
+	k1 := rand.Uint64()
 	for i := 0; i < b.N; i++ {
 		siphash.Hash128(k0, k1, testBytes)
 	}
@@ -187,8 +188,8 @@ func BenchmarkHash64SpookyHash(b *testing.B) {
 }
 
 func BenchmarkHash128SpookyHash(b *testing.B) {
-	k0 := uint64(rand.Int63())
-	k1 := uint64(rand.Int63())
+	k0 := rand.Uint64()
+	k1 := rand.Uint64()
 	for i := 0; i < b.N; i++ {
 		spooky.Hash128(testBytes, &k0, &k1)
 	}
@@ -197,5 +198,19 @@ func BenchmarkHash128SpookyHash(b *testing.B) {
 func BenchmarkHashMD5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		md5.Sum(testBytes)
+	}
+}
+
+func BenchmarkHash64MetroHash(b *testing.B) {
+	seed := rand.Uint64()
+	for i := 0; i < b.N; i++ {
+		metro.Hash64(testBytes, seed)
+	}
+}
+
+func BenchmarkHash128MetroHash(b *testing.B) {
+	seed := rand.Uint64()
+	for i := 0; i < b.N; i++ {
+		metro.Hash128(testBytes, seed)
 	}
 }

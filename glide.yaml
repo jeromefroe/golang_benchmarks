@@ -14,6 +14,8 @@ testImport:
   version: e2d0fe22b456fa0a35cd883ba355ecfcf1881490
 - package: github.com/dgryski/go-highway
   version: 17171d698d9c22164cb429962abc409ef514d3b2
+- package: github.com/dgryski/go-metro
+  version: 0f6473574cdfd7be3962c41fb23dc4768b1f7deb
 - package: github.com/dgryski/go-spooky
   version: ed3d087f40e29d80bfe4d9c1c1f2d4885eb1b82a
 - package: github.com/m3db/m3x

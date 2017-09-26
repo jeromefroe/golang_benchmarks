@@ -1,5 +1,5 @@
-hash: c66e1bdd47695e088988606f28339830cee65f121fb6db8f72e13e5437775823
-updated: 2017-08-20T19:49:42.090027908-04:00
+hash: 50a97c228a38d081f108cbfa4c1f0fb18ad2bdfa6efe7f8b724cd7c35eb0bb53
+updated: 2017-09-26T19:20:19.079422369-04:00
 imports: []
 testImports:
 - name: github.com/apache/thrift
@@ -16,6 +16,8 @@ testImports:
   version: e2d0fe22b456fa0a35cd883ba355ecfcf1881490
 - name: github.com/dgryski/go-highway
   version: 17171d698d9c22164cb429962abc409ef514d3b2
+- name: github.com/dgryski/go-metro
+  version: 0f6473574cdfd7be3962c41fb23dc4768b1f7deb
 - name: github.com/dgryski/go-spooky
   version: ed3d087f40e29d80bfe4d9c1c1f2d4885eb1b82a
 - name: github.com/facebookgo/clock
@@ -43,7 +45,7 @@ testImports:
 - name: github.com/OneOfOne/xxhash
   version: 9f129ced0523605cdde14a954ae4609e366a7998
 - name: github.com/philhofer/fwd
-  version: 1612a298117663d7bc9a760ae20d383413859798
+  version: bb6d471dc95d4fe11e432687f8b70ff496cf3136
 - name: github.com/pmezard/go-difflib
   version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
@@ -70,7 +72,7 @@ testImports:
   subpackages:
   - assert
 - name: github.com/tinylib/msgp
-  version: 701aacd80f9ace06ea698bd7801c361fb7fe580b
+  version: a011d4dea24f46fcd895ddefb67037dce9d41742
   subpackages:
   - msgp
 - name: github.com/uber-go/atomic
