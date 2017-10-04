@@ -223,6 +223,25 @@ defer mu.Unlock()
 mu.Lock()
 ```
 
+### False Sharing
+
+`false_sharing_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkIncrementFalseSharing                |  3000 | 453087 ns/op
+BenchmarkIncrementNoFalseSharing              |  5000 | 246124 ns/op
+BenchmarkIncrementNoFalseSharingLocalVariable | 20000 | 71624 ns/op
+
+go version go1.8.3 darwin/amd64
+
+This example demonstrates the effects of false sharing when multiple goroutines are updating
+a variable. In the first benchmark, although the goroutines are each updating different variables
+because those variables are on the same cache line, the updates contend with one another. In the
+second example, however, we introduce some padding to ensure the integers are on different cache
+lines so the updates won't interfere with each other. Finally, the last example performs the
+increments locally and then writes the variable to the shared slice.
+
 ### Function Call
 
 `function_call_test.go`
