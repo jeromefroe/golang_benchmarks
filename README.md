@@ -454,8 +454,8 @@ BenchmarkIndexValueRangeArrayPtr | 100000000 | 10.1 ns/op | 0 B/op | 0 allocs/op
 
 Generated using go version go1.8.3 darwin/amd64
 
-These tests looking at three different ways to range over an array. The first benchmark
-uses just the index of into the array (`for i := range a`), the second uses both the
+These tests look at three different ways to range over an array. The first benchmark
+uses just the index into the array (`for i := range a`), the second uses both the
 index and the value (`for i, v := range a`), and the third uses the index and value while
 ranging over a pointer to an array (`for i, v := range &a`). What's interesting to note is
 that the second benchmark is noticably slower than the other two. This is because go
