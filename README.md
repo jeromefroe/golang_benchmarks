@@ -442,7 +442,7 @@ mentioned in the article, for most applications the second algorithim will be
 sufficient enough as the bias introduced by the algorithim is likely less than
 the bias from the pseudo-random number generator which is used.
 
-### Range over Array
+### Range over Arrays and Slices
 
 `range_array_test.go`
 
@@ -451,18 +451,23 @@ Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocation
 BenchmarkIndexRangeArray         | 100000000 | 10.6 ns/op | 0 B/op | 0 allocs/op
 BenchmarkIndexValueRangeArray    | 100000000 | 14.1 ns/op | 0 B/op | 0 allocs/op
 BenchmarkIndexValueRangeArrayPtr | 100000000 | 10.1 ns/op | 0 B/op | 0 allocs/op
+enchmarkIndexSlice               | 100000000 | 10.4 ns/op | 0 B/op | 0 allocs/op
+BenchmarkIndexValueSlice         | 100000000 | 10.3 ns/op | 0 B/op | 0 allocs/op
 
 Generated using go version go1.8.3 darwin/amd64
 
-These tests look at three different ways to range over an array. The first benchmark
-uses just the index into the array (`for i := range a`), the second uses both the
-index and the value (`for i, v := range a`), and the third uses the index and value while
-ranging over a pointer to an array (`for i, v := range &a`). What's interesting to note is
+These tests look at three different ways to range over an array or slice. The first three benchmarks
+range over an array. The first uses just the index into the array (`for i := range a`), the second
+uses both the index and the value (`for i, v := range a`), and the third uses the index and value
+while ranging over a pointer to an array (`for i, v := range &a`). What's interesting to note is
 that the second benchmark is noticably slower than the other two. This is because go
 [makes a copy of the array when you range over the index and value](https://groups.google.com/forum/#!topic/golang-dev/35W8LvT51vg).
 Another example of this can been in
 [this tweet by Damian Gryski](https://twitter.com/dgryski/status/816226596835225600) and there is
-even [a linter to catch this](https://github.com/mdempsky/rangerdanger).
+even [a linter to catch this](https://github.com/mdempsky/rangerdanger). The last two benchmarks
+look at ranging over a slice. The first uses just the index into the slice and the second uses
+both the index and the value. Unlike in the case of an array, there is no difference in performance
+here.
 
 ### Reducing an Integer
 
