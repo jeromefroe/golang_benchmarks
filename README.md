@@ -304,8 +304,8 @@ for i := range s {
 
 If the value is not the the zero value of the type though then the loop
 is not optimized as the benchmarks show. The library
-[`go-memset`](https://github.com/tmthrgd/go-memset) though provides a
-functions which optimize clearing byte slices with any value not just zero.
+[`go-memset`](https://github.com/tmthrgd/go-memset) provides a function
+which optimizes clearing byte slices with any value not just zero.
 
 ### Mutex
 
