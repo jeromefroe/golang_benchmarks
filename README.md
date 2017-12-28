@@ -276,6 +276,37 @@ Generated using go version go1.8.1 darwin/amd64
 This benchmark looks at the overhead of converting an interface to its concrete type. Surprisingly,
 the overhead of the type assertion, while not zero, it pretty minimal at only about 0.5 nanoseconds.
 
+### Memset optimization
+
+`memset_test.go`
+
+Benchmark Name|Iterations|Per-Iteration
+----|----|----
+BenchmarkSliceClearZero/1K      | 100000000 |  12.9 ns/op
+BenchmarkSliceClearZero/16K     |  10000000 |   167 ns/op
+BenchmarkSliceClearZero/128K    |    300000 |  3994 ns/op
+BenchmarkSliceClearNonZero/1K   |   3000000 |   497 ns/op
+BenchmarkSliceClearNonZero/16K  |    200000 |  7891 ns/op
+BenchmarkSliceClearNonZero/128K |     20000 | 79763 ns/op
+
+Generated using go version go1.9.2 darwin/amd64
+
+This benchmark looks at the
+[Go compiler's optimization for clearing slices](https://github.com/golang/go/wiki/CompilerOptimizations#idioms)
+to the respective type's zero value. Specifically, if `s` is a slice or
+an array then the following loop is optimized with memclr calls:
+
+```
+for i := range s {
+	a[i] = <zero value for element of s>
+}
+```
+
+If the value is not the the zero value of the type though then the loop
+is not optimized as the benchmarks show. The library
+[`go-memset`](https://github.com/tmthrgd/go-memset) though provides a
+functions which optimize clearing byte slices with any value not just zero.
+
 ### Mutex
 
 `mutex_test.go`
