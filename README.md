@@ -276,6 +276,33 @@ Generated using go version go1.8.1 darwin/amd64
 This benchmark looks at the overhead of converting an interface to its concrete type. Surprisingly,
 the overhead of the type assertion, while not zero, it pretty minimal at only about 0.5 nanoseconds.
 
+### Map Lookup
+
+`map_lookup_test.go`
+
+Generated using go version go1.9.3 darwin/amd64
+
+Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
+----|----|----|----|----
+BenchmarkMapUint64      |  50000 |   24322 ns/op | 0 B/op | 0 allocs/op
+BenchmarkMapString1     | 100000 |   22587 ns/op | 0 B/op | 0 allocs/op
+BenchmarkMapString10    |  50000 |   28892 ns/op | 0 B/op | 0 allocs/op
+BenchmarkMapString100   |  50000 |   35785 ns/op | 0 B/op | 0 allocs/op
+BenchmarkMapString1000  |  20000 |   85820 ns/op | 0 B/op | 0 allocs/op
+BenchmarkMapString10000 |   2000 | 1046144 ns/op | 0 B/op | 0 allocs/op
+
+This benchmark looks at the time taken to perform lookups in a map with different key types.
+The motivation for this benchmark comes from a talk given by Björn Rabenstein titled
+"How to Optimize Go Code for Really High Performance". In the talk, Björn includes a
+[section](https://docs.google.com/presentation/d/1Zu0BdbhMRar7ycEwDi8jepGokTXTDXlKFf7C13tusuI/edit#slide=id.gd8292747e_0_12)
+looking at the performance of map lookups with different types of keys. He found that as the
+length of the string got longer the performance of the lookup got significantly worse. This
+isn't entirely unexpected since a map lookup requires us to hash the string, and the longer
+the string the longer that hash calculation will take, and also to compare the lookup with
+the key in the corresponding to verify that they match, and here again the longer the string
+is the longer that comparison will take. As a result of this degredation, Prometheus decided
+to use maps with int64 keys and perform collision detection themselves.
+
 ### Memset optimization
 
 `memset_test.go`
