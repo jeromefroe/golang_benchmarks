@@ -301,7 +301,7 @@ isn't entirely unexpected since a map lookup requires us to hash the string, and
 the string the longer that hash calculation will take, and also to compare the lookup with
 the key in the corresponding to verify that they match, and here again the longer the string
 is the longer that comparison will take. As a result of this degredation, Prometheus decided
-to use maps with int64 keys and perform collision detection themselves.
+to use maps with `int64` keys and perform collision detection themselves.
 
 ### Memset optimization
 
