@@ -10,7 +10,7 @@ Furthemore, the Golang wiki provides a
 
 ### Allocate on Stack vs Heap
 
-`allocate_stack_vs_heap_test.go`
+[`allocate_stack_vs_heap_test.go`](allocate_stack_vs_heap_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -67,7 +67,7 @@ be found on this [golang-nuts post](https://groups.google.com/forum/#!topic/gola
 
 ### Append
 
-`append_test.go`
+[`append_test.go`](append_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -84,7 +84,7 @@ is because the compiler can optimize this away into a single `memcpy`.
 
 ### Atomic Operations
 
-`atomic_operations_test.go`
+[`atomic_operations_test.go`](atomic_operations_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -127,7 +127,7 @@ is atomic if executed on natural alignments the load will be atomic as well.
 
 ### Bit Tricks
 
-`bit_tricks_test.go`
+[`bit_tricks_test.go`](bit_tricks_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -148,7 +148,7 @@ of division by a power of two by performing a right shift.
 
 ### Buffered vs Synchronous Channel
 
-`buffered_vs_unbuffered_channel_test.go`
+[`buffered_vs_unbuffered_channel_test.go`](buffered_vs_unbuffered_channel_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -165,7 +165,7 @@ another object into it.
 
 ### Channel vs Ring Buffer
 
-`channel_vs_ring_buffer_test.go`
+[`channel_vs_ring_buffer_test.go`](channel_vs_ring_buffer_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -198,7 +198,7 @@ in the MPSC and MPMC a channel performed much better than a ring buffer did.
 
 ### defer
 
-`defer_test.go`
+[`defer_test.go`](defer_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -225,7 +225,7 @@ mu.Lock()
 
 ### False Sharing
 
-`false_sharing_test.go`
+[`false_sharing_test.go`](false_sharing_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -244,7 +244,7 @@ increments locally and then writes the variable to the shared slice.
 
 ### Function Call
 
-`function_call_test.go`
+[`function_call_test.go`](function_call_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -264,7 +264,7 @@ to the interface method call.
 
 ### Interface conversion
 
-`interface_conversion_test.go`
+[`interface_conversion_test.go`](interface_conversion_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -305,7 +305,7 @@ to use maps with `int64` keys and perform collision detection themselves.
 
 ### Memset optimization
 
-`memset_test.go`
+[`memset_test.go`](memset_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -336,7 +336,7 @@ which optimizes clearing byte slices with any value not just zero.
 
 ### Mutex
 
-`mutex_test.go`
+[`mutex_test.go`](mutex_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -353,7 +353,7 @@ we acquire a write lock on a `RWMutex`. And in the last benchmark we acquire a r
 
 ### Non-cryptographic Hash functions
 
-`non_cryptographic_hash_functions_test.go`
+[`non_cryptographic_hash_functions_test.go`](non_cryptographic_hash_functions_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -389,7 +389,7 @@ These benchmarks look at the speed of various non-cryptographic hash function im
 
 ### Pass By Value vs Reference
 
-`pass_by_value_vs_reference_test.go`
+[`pass_by_value_vs_reference_test.go`](pass_by_value_vs_reference_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -409,7 +409,7 @@ be copied into the function's stack when passed by value.
 
 ### Pool
 
-`pool_test.go`
+[`pool_test.go`](pool_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -432,7 +432,7 @@ and
 
 ### Pool Put Non Interface
 
-`pool_put_non_interface_test.go`
+[`pool_put_non_interface_test.go`](pool_put_non_interface_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -454,7 +454,7 @@ appear to be a significant cost in speed.
 
 ### Rand
 
-`rand_test.go`
+[`rand_test.go`](rand_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -479,7 +479,7 @@ optimizations for using the math/rand package for those who are interested.
 
 ### Random Bounded Numbers
 
-`random_bounded_test.go`
+[`random_bounded_test.go`](random_bounded_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -502,7 +502,7 @@ the bias from the pseudo-random number generator which is used.
 
 ### Range over Arrays and Slices
 
-`range_array_test.go`
+[`range_test.go`](range_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -529,7 +529,7 @@ here.
 
 ### Reducing an Integer
 
-`reduction_test.go`
+[`reduction_test.go`](reduction_test.go)
 
 Benchmark Name|Iterations|Per-Iteration
 ----|----|----
@@ -560,7 +560,7 @@ using a probing function which adds the probe bias to the higher order bits.
 
 ### Slice Initialization Append vs Index
 
-`slice_intialization_append_vs_index_test.go`
+[`slice_initialization_append_vs_index_test.go`](slice_initialization_append_vs_index_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -576,7 +576,7 @@ that they are compiled to and update this section in the future.
 
 ### String Concatenation
 
-`string_concatenation_test.go`
+[`string_concatenation_test.go`](string_concatenation_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -620,7 +620,7 @@ on the stack saving a heap allocation.
 
 ### Type Assertion
 
-`type_assertion_test.go`
+[`type_assertion_test.go`](type_assertion_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
@@ -633,7 +633,7 @@ it was so cheap.
 
 ### Write Bytes vs String
 
-`write_bytes_vs_string_test.go`
+[`write_bytes_vs_string_test.go`](write_bytes_vs_string_test.go)
 
 Benchmark Name|Iterations|Per-Iteration|Bytes Allocated per Operation|Allocations per Operation
 ----|----|----|----|----
